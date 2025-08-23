@@ -1,0 +1,45 @@
+{
+  "EC2": {
+    "ec2-instance-1": {
+      "owner": "alice",
+      "team": "devops",
+      "environment": "prod"
+    },
+    "ec2-instance-2": {
+      "team": "backend",
+      "project": "migration"
+    }
+  },
+  "S3": {
+    "s3-bucket-logs": {
+      "owner": "bob",
+      "team": "security",
+      "purpose": "audit-logs"
+    },
+    "s3-bucket-temp": {
+      "owner": "charlie"
+    }
+  },
+  "VPC": {
+    "vpc-main": {
+      "team": "network",
+      "region": "us-east-1"
+    }
+  },
+  "SG": {
+    "sg-webserver": {
+      "owner": "david",
+      "team": "infra",
+      "port": "443"
+    }
+  },
+  "IAM": {
+    "iam-role-admin": {
+      "owner": "eva",
+      "team": "security"
+    },
+    "iam-role-temp": {
+      "team": "interns"
+    }
+  }
+}
