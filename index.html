@@ -4,26 +4,49 @@
   <meta charset="UTF-8">
   <title>Resources Compliance Dashboard</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { text-align: center; margin-bottom: 30px; }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      background: #f8fafc;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+      color: #111827;
+    }
 
     .resource-type {
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 10px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .resource-type:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     .resource-header {
-      background: #f5f5f5;
-      padding: 12px;
+      background: #f3f4f6;
+      padding: 16px 20px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #374151;
     }
 
     .arrow {
       transition: transform 0.2s ease;
+      font-weight: bold;
     }
 
     .arrow.open {
@@ -34,31 +57,40 @@
       width: 100%;
       border-collapse: collapse;
       display: none;
+      font-size: 0.95rem;
     }
 
     .resource-table th, .resource-table td {
-      border: 1px solid #ccc;
-      padding: 8px;
+      border: 1px solid #e5e7eb;
+      padding: 12px;
       text-align: left;
     }
 
     .resource-table th {
-      background: #f0f0f0;
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .resource-table td {
+      background: #ffffff;
     }
 
     .compliance-pass {
       color: green;
       font-weight: bold;
+      font-size: 1.2rem;
     }
 
     .compliance-fail {
       color: red;
       font-weight: bold;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
-  <h1>Resources Compliance Dashboard</h1>
+  <h1>📊 Resources Compliance Dashboard</h1>
   <div id="dashboard"></div>
 
   <script>
@@ -118,7 +150,7 @@
     }
 
     // Build dashboard
-    fetch("hardcodedata.json")
+    fetch("data.json")
       .then(res => res.json())
       .then(data => {
         const dashboard = document.getElementById("dashboard");
