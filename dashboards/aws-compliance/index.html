@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resources Compliance Dashboard</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+      background: #f8fafc;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2rem;
+      color: #111827;
+    }
+
+    .resource-type {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .resource-type:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .resource-header {
+      background: #f3f4f6;
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .arrow {
+      transition: transform 0.2s ease;
+      font-weight: bold;
+    }
+
+    .arrow.open {
+      transform: rotate(90deg);
+    }
+
+    .resource-table {
+      width: 100%;
+      border-collapse: collapse;
+      display: none;
+      font-size: 0.95rem;
+    }
+
+    .resource-table th, .resource-table td {
+      border: 1px solid #e5e7eb;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .resource-table th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .resource-table td {
+      background: #ffffff;
+    }
+
+    .compliance-pass {
+      color: green;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .compliance-fail {
+      color: red;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Resources Compliance Dashboard</h1>
+  <div id="dashboard"></div>
+
+  <script>
+    function createComplianceTable(resources) {
+      const table = document.createElement("table");
+      table.className = "resource-table";
+
+      // Header
+      const header = document.createElement("tr");
+      ["Name", "Owner Tag", "Team Tag", "Other Tags", "Compliance"].forEach(h => {
+        const th = document.createElement("th");
+        th.textContent = h;
+        header.appendChild(th);
+      });
+      table.appendChild(header);
+
+      // Rows
+      for (const [name, tags] of Object.entries(resources)) {
+        const tr = document.createElement("tr");
+
+        // Name
+        const tdName = document.createElement("td");
+        tdName.textContent = name;
+        tr.appendChild(tdName);
+
+        // Owner
+        const tdOwner = document.createElement("td");
+        tdOwner.textContent = tags.owner || "N/A";
+        tr.appendChild(tdOwner);
+
+        // Team
+        const tdTeam = document.createElement("td");
+        tdTeam.textContent = tags.team || "N/A";
+        tr.appendChild(tdTeam);
+
+        // Other tags
+        const tdOther = document.createElement("td");
+        const otherTags = Object.entries(tags)
+          .filter(([k]) => k !== "owner" && k !== "team")
+          .map(([k, v]) => `${k}: ${v}`);
+        tdOther.textContent = otherTags.length ? otherTags.join(", ") : "N/A";
+        tr.appendChild(tdOther);
+
+        // Compliance
+        const tdCompliance = document.createElement("td");
+        if (tags.owner && tags.team) {
+          tdCompliance.innerHTML = '<span class="compliance-pass">✅</span>';
+        } else {
+          tdCompliance.innerHTML = '<span class="compliance-fail">❌</span>';
+        }
+        tr.appendChild(tdCompliance);
+
+        table.appendChild(tr);
+      }
+
+      return table;
+    }
+
+    // Build dashboard
+    fetch("hardcodedata.json")
+      .then(res => res.json())
+      .then(data => {
+        const dashboard = document.getElementById("dashboard");
+
+        for (const [resourceType, resources] of Object.entries(data)) {
+          const container = document.createElement("div");
+          container.className = "resource-type";
+
+          const header = document.createElement("div");
+          header.className = "resource-header";
+          header.innerHTML = `<span>${resourceType}</span><span class="arrow">▶</span>`;
+          container.appendChild(header);
+
+          const table = createComplianceTable(resources);
+          container.appendChild(table);
+
+          header.addEventListener("click", () => {
+            const arrow = header.querySelector(".arrow");
+            const isOpen = table.style.display === "table";
+            table.style.display = isOpen ? "none" : "table";
+            arrow.classList.toggle("open", !isOpen);
+          });
+
+          dashboard.appendChild(container);
+        }
+      });
+  </script>
+</body>
+</html>
